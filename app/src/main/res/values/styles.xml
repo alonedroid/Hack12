@@ -1,0 +1,8 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="android:Holo.Light.ButtonBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+</resources>
