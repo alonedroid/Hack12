@@ -71,13 +71,13 @@ public class SNSMobilePush {
         // also change the notification payload as per your preferences using
         // the method
         // com.amazonaws.sns.samples.tools.SampleMessageGenerator.getSampleAppleMessage()
-        String privateKey = "";
-        String certificate = "";
-        // end of each line.
-        String applicationName = "APNS_SANDBOX";
+		String certificate = null;
+		String privateKey = null;
+		// end of each line.
+        String applicationName = "Bee";
         String deviceToken = "b267ee46225f45734306921101135e1bd26b0811f8d44dd777dbad8e58f66b37";
-        snsClientWrapper.demoNotification(Platform.APNS_SANDBOX, certificate,
-                privateKey, deviceToken, applicationName, attributesMap);
+        snsClientWrapper.demoNotification(Platform.APNS_SANDBOX, privateKey,
+                certificate, deviceToken, applicationName, attributesMap);
     }
 
     private static Map<String, MessageAttributeValue> addBaiduNotificationAttributes() {

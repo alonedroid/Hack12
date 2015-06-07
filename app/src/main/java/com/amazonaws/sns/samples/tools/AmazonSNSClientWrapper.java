@@ -14,6 +14,8 @@ package com.amazonaws.sns.samples.tools;
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +31,7 @@ import com.amazonaws.services.sns.model.PublishResult;
 import com.amazonaws.sns.samples.tools.SampleMessageGenerator.Platform;
 
 public class AmazonSNSClientWrapper {
-
+	private final static String TAG = "AmazonSNSClientWrapper";
 	private final AmazonSNS snsClient;
 
 	public AmazonSNSClientWrapper(AmazonSNS client) {
@@ -116,29 +118,31 @@ public class AmazonSNSClientWrapper {
 			Map<Platform, Map<String, MessageAttributeValue>> attrsMap) {
 		// Create Platform Application. This corresponds to an app on a
 		// platform.
-		CreatePlatformApplicationResult platformApplicationResult = createPlatformApplication(
-				applicationName, platform, principal, credential);
-		System.out.println(platformApplicationResult);
-
+		Log.d(TAG,"demoNotification start");
+		//CreatePlatformApplicationResult platformApplicationResult = createPlatformApplication(
+		//		applicationName, platform, principal, credential);
+		//System.out.println(platformApplicationResult);
+Log.d(TAG,"createPlatformApplication");
 		// The Platform Application Arn can be used to uniquely identify the
 		// Platform Application.
-		String platformApplicationArn = platformApplicationResult
-				.getPlatformApplicationArn();
+		String platformApplicationArn = "arn:aws:sns:us-west-2:406563354822:app/APNS_SANDBOX/Bee";
+		Log.d(TAG,"getPlatformApplicationArn");
 
 		// Create an Endpoint. This corresponds to an app on a device.
-		CreatePlatformEndpointResult platformEndpointResult = createPlatformEndpoint(
-				platform,
-				"CustomData - Useful to store endpoint specific data",
-				platformToken, platformApplicationArn);
-		System.out.println(platformEndpointResult);
+		//CreatePlatformEndpointResult platformEndpointResult = createPlatformEndpoint(
+		//		platform,
+		//		"CustomData - Useful to store endpoint specific data",
+		//		platformToken, platformApplicationArn);
+		//System.out.println(platformEndpointResult);
+		//Log.d(TAG,"createPlatformEndpoint");
 
 		// Publish a push notification to an Endpoint.
 		PublishResult publishResult = publish(
-				platformEndpointResult.getEndpointArn(), platform, attrsMap);
+				"arn:aws:sns:us-west-2:406563354822:endpoint/APNS_SANDBOX/Bee/8d731564-518f-39e1-8e02-2a3e582431d4", platform, attrsMap);
 		System.out.println("Published! \n{MessageId="
 				+ publishResult.getMessageId() + "}");
 		// Delete the Platform Application since we will no longer be using it.
-		deletePlatformApplication(platformApplicationArn);
+		//deletePlatformApplication(platformApplicationArn);
 	}
 
 	private String getPlatformSampleMessage(Platform platform) {
