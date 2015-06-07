@@ -13,5 +13,4 @@ public interface RestClient extends RestClientHeaders {
     @Get("/logoff.php")
     @Accept(MediaType.APPLICATION_JSON)
     String requestMacRock();
-
 }

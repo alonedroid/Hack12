@@ -4,13 +4,23 @@ import android.app.Activity;
 import android.os.Handler;
 import android.util.Log;
 
+import com.amazonaws.http.UrlHttpClient;
+
+import org.androidannotations.annotations.AfterInject;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.rest.RestService;
 
+import java.io.IOException;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
+
 import mikamiyusen.com.hack12.utility.RestClient;
+import mikamiyusen.com.hack12.utility.SNSMobilePush;
 import mikamiyusen.com.hack12.utility.Sensor;
 import mikamiyusen.com.hack12.utility.Sound;
 
@@ -25,6 +35,11 @@ public class MainActivity extends Activity {
 
     @Bean
     Sensor sensor;
+
+    @AfterInject
+    void init(){
+        HttpsURLConnection.setDefaultHostnameVerifier(new NullHostNameVerifier());
+    }
 
     @AfterViews
     void initViews() {
@@ -48,6 +63,7 @@ public class MainActivity extends Activity {
     protected void start(boolean startAction) {
         if (startAction) {
             this.sound.sayHello();
+            pushStart();
         } else {
             this.sound.sayBye();
             logout();
@@ -68,8 +84,30 @@ public class MainActivity extends Activity {
     void logout() {
         try {
             this.restClient.requestMacRock();
-        }catch(Exception e){
+        } catch (Exception e) {
             Log.d("error", e.toString());
         }
+    }
+
+    @Background
+    void pushStart() {
+        try {
+            SNSMobilePush.push(this);
+        } catch (IOException e) {
+            Log.d("error", e.toString());
+            for(StackTraceElement ele:e.getStackTrace()){
+                Log.d("error", ele.toString());
+            }
+        }
+    }
+
+    public class NullHostNameVerifier implements HostnameVerifier {
+
+        @Override
+        public boolean verify(String hostname, SSLSession session) {
+            Log.i("RestUtilImpl", "Approving certificate for " + hostname);
+            return true;
+        }
+
     }
 }
