@@ -5,9 +5,9 @@ import rx.subjects.BehaviorSubject;
 
 public class Nervous {
 
-    private static final int NERVOUS_NUM = 12;
+    private static final int NERVOUS_NUM = 15;
 
-    private static final int NERVOUS_RESET_COUNT = 30;
+    private static final int NERVOUS_RESET_COUNT = 40;
 
     @Getter
     private BehaviorSubject<Boolean> nervous = BehaviorSubject.create(false);

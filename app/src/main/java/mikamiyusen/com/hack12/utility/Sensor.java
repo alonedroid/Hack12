@@ -8,6 +8,8 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 
+import java.util.concurrent.TimeUnit;
+
 import lombok.Getter;
 
 @EBean
@@ -36,6 +38,7 @@ public class Sensor {
         this.sensorManager.registerListener(this.proximity, this.sensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_PROXIMITY), SensorManager.SENSOR_DELAY_UI);
         this.proximity.getActioning()
                 .filter(actioning -> actioning)
+                .delay(2000, TimeUnit.MILLISECONDS)
                 .subscribe(actioning -> registerAccelerometerListener());
         this.proximity.getActioning()
                 .filter(actioning -> !actioning)
