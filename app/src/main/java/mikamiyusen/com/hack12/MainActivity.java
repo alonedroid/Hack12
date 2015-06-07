@@ -36,6 +36,8 @@ public class MainActivity extends Activity {
     @Bean
     Sensor sensor;
 
+    SNSMobilePush push;
+
     @AfterInject
     void init(){
         HttpsURLConnection.setDefaultHostnameVerifier(new NullHostNameVerifier());
@@ -63,19 +65,25 @@ public class MainActivity extends Activity {
     protected void start(boolean startAction) {
         if (startAction) {
             this.sound.sayHello();
-            pushStart();
+            pushMessage("play");
+            this.welcomeCount = 0;
         } else {
             this.sound.sayBye();
+            pushMessage("stop");
             logout();
         }
     }
 
+    private int welcomeCount = 0;
+
     private void sayWelcome() {
         this.sound.sayWelcome();
+        pushMessage(this.welcomeCount++%2==0?"fadeout":"fadein");
         new Handler().postDelayed(() -> this.sensor.getAccelerometer().getVisitor().init(), 1000);
     }
 
     private void sayYell() {
+        pushMessage("Fight！");
         this.sound.sayYell();
         new Handler().postDelayed(() -> this.sensor.getAccelerometer().getNervous().init(), 1000);
     }
@@ -90,14 +98,11 @@ public class MainActivity extends Activity {
     }
 
     @Background
-    void pushStart() {
+    void pushMessage(String message) {
         try {
-            SNSMobilePush.push(this);
+            SNSMobilePush.push(this, message);
         } catch (IOException e) {
             Log.d("error", e.toString());
-            for(StackTraceElement ele:e.getStackTrace()){
-                Log.d("error", ele.toString());
-            }
         }
     }
 

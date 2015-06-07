@@ -5,7 +5,7 @@ import rx.subjects.BehaviorSubject;
 
 public class Visitor {
 
-    private static final int VISIT_DEGREE = 45;
+    private static final int VISIT_DEGREE = 10;
 
     private static final double NOISE = 0.0;
 

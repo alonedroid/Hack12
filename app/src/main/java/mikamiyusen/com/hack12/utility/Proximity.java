@@ -7,12 +7,13 @@ import org.androidannotations.annotations.EBean;
 
 import lombok.Getter;
 import rx.subjects.BehaviorSubject;
+import rx.subjects.PublishSubject;
 
 @EBean
 public class Proximity implements SensorEventListener {
 
     @Getter
-    private BehaviorSubject<Boolean> actioning = BehaviorSubject.create(false);
+    private BehaviorSubject<Boolean> actioning = BehaviorSubject.create();
 
     @Override
     public void onSensorChanged(SensorEvent event) {

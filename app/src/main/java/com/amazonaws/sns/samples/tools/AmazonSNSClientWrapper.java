@@ -79,7 +79,7 @@ public class AmazonSNSClientWrapper {
 	}
 
 	private PublishResult publish(String endpointArn, Platform platform,
-			Map<Platform, Map<String, MessageAttributeValue>> attributesMap) {
+			Map<Platform, Map<String, MessageAttributeValue>> attributesMap, String sendMessage) {
 		PublishRequest publishRequest = new PublishRequest();
 		Map<String, MessageAttributeValue> notificationAttributes = getValidNotificationAttributes(attributesMap
 				.get(platform));
@@ -97,52 +97,24 @@ public class AmazonSNSClientWrapper {
 		publishRequest.setTargetArn(endpointArn);
 
 		// Display the message that will be sent to the endpoint/
-		System.out.println("{Message Body: " + message + "}");
+		System.out.println("{Message Body: " + sendMessage + "}");
 		StringBuilder builder = new StringBuilder();
 		builder.append("{Message Attributes: ");
-		for (Map.Entry<String, MessageAttributeValue> entry : notificationAttributes
-				.entrySet()) {
-			builder.append("(\"" + entry.getKey() + "\": \""
-					+ entry.getValue().getStringValue() + "\"),");
-		}
-		builder.deleteCharAt(builder.length() - 1);
+		builder.append(sendMessage);
 		builder.append("}");
-		System.out.println(builder.toString());
+		System.out.println(message);
 
-		publishRequest.setMessage(message);
+		publishRequest.setMessage("{\"APNS_SANDBOX\":\"{\\\"aps\\\":{\\\"sound\\\":\\\"default\\\",\\\"alert\\\":\\\""+sendMessage+"\\\"}}\"}");
 		return snsClient.publish(publishRequest);
 	}
 
 	public void demoNotification(Platform platform, String principal,
 			String credential, String platformToken, String applicationName,
-			Map<Platform, Map<String, MessageAttributeValue>> attrsMap) {
-		// Create Platform Application. This corresponds to an app on a
-		// platform.
-		Log.d(TAG,"demoNotification start");
-		//CreatePlatformApplicationResult platformApplicationResult = createPlatformApplication(
-		//		applicationName, platform, principal, credential);
-		//System.out.println(platformApplicationResult);
-Log.d(TAG,"createPlatformApplication");
-		// The Platform Application Arn can be used to uniquely identify the
-		// Platform Application.
-		String platformApplicationArn = "arn:aws:sns:us-west-2:406563354822:app/APNS_SANDBOX/Bee";
-		Log.d(TAG,"getPlatformApplicationArn");
-
-		// Create an Endpoint. This corresponds to an app on a device.
-		//CreatePlatformEndpointResult platformEndpointResult = createPlatformEndpoint(
-		//		platform,
-		//		"CustomData - Useful to store endpoint specific data",
-		//		platformToken, platformApplicationArn);
-		//System.out.println(platformEndpointResult);
-		//Log.d(TAG,"createPlatformEndpoint");
-
-		// Publish a push notification to an Endpoint.
+			Map<Platform, Map<String, MessageAttributeValue>> attrsMap, String message) {
 		PublishResult publishResult = publish(
-				"arn:aws:sns:us-west-2:406563354822:endpoint/APNS_SANDBOX/Bee/8d731564-518f-39e1-8e02-2a3e582431d4", platform, attrsMap);
+				"arn:aws:sns:us-west-2:406563354822:endpoint/APNS_SANDBOX/Bee/8d731564-518f-39e1-8e02-2a3e582431d4", platform, attrsMap, message);
 		System.out.println("Published! \n{MessageId="
 				+ publishResult.getMessageId() + "}");
-		// Delete the Platform Application since we will no longer be using it.
-		//deletePlatformApplication(platformApplicationArn);
 	}
 
 	private String getPlatformSampleMessage(Platform platform) {

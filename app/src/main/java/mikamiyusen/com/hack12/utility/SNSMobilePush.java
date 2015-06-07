@@ -11,6 +11,8 @@ import com.amazonaws.services.sns.model.MessageAttributeValue;
 import com.amazonaws.sns.samples.tools.AmazonSNSClientWrapper;
 import com.amazonaws.sns.samples.tools.SampleMessageGenerator.Platform;
 
+import org.androidannotations.annotations.EBean;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +39,7 @@ public class SNSMobilePush {
         attributesMap.put(Platform.MPNS, addMPNSNotificationAttributes());
     }
 
-    public static void push(Context context) throws IOException {
+    public static void push(Context context, String message) throws IOException {
         AmazonSNS sns = new AmazonSNSClient(new PropertiesCredentials(
                 context.getResources().openRawResource(R.raw.credentials)));
 
@@ -47,7 +49,7 @@ public class SNSMobilePush {
         System.out.println("===========================================\n");
         try {
             SNSMobilePush sample = new SNSMobilePush(sns);
-            sample.demoAppleSandboxAppNotification();
+            sample.demoAppleSandboxAppNotification(message);
         } catch (AmazonServiceException ase) {
             System.out
                     .println("Caught an AmazonServiceException, which means your request made it "
@@ -66,7 +68,7 @@ public class SNSMobilePush {
         }
     }
 
-    public void demoAppleSandboxAppNotification() {
+    public void demoAppleSandboxAppNotification(String message) {
         // TODO: Please fill in following values for your application. You can
         // also change the notification payload as per your preferences using
         // the method
@@ -77,7 +79,7 @@ public class SNSMobilePush {
         String applicationName = "Bee";
         String deviceToken = "b267ee46225f45734306921101135e1bd26b0811f8d44dd777dbad8e58f66b37";
         snsClientWrapper.demoNotification(Platform.APNS_SANDBOX, privateKey,
-                certificate, deviceToken, applicationName, attributesMap);
+                certificate, deviceToken, applicationName, attributesMap, message);
     }
 
     private static Map<String, MessageAttributeValue> addBaiduNotificationAttributes() {
