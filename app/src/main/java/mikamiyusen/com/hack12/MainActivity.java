@@ -36,6 +36,7 @@ public class MainActivity extends Activity {
     @Bean
     Sensor sensor;
 
+    @Bean
     SNSMobilePush push;
 
     @AfterInject
@@ -100,7 +101,7 @@ public class MainActivity extends Activity {
     @Background
     void pushMessage(String message) {
         try {
-            SNSMobilePush.push(this, message);
+            SNSMobilePush.push(message);
         } catch (IOException e) {
             Log.d("error", e.toString());
         }

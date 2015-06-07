@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">Hack12</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_sub">SubActivity</string>
-    <string name="title_activity_sub2">Sub2Activity</string>
+    <string name="endpoint">https://sns.us-west-2.amazonaws.com/</string>
 </resources>
