@@ -5,7 +5,7 @@ import android.content.Context;
 import com.amazonaws.auth.PropertiesCredentials;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.AmazonSNSClient;
-import com.amazonaws.sns.samples.tools.AmazonSNSClientWrapper;
+import com.amazonaws.services.sns.model.PublishRequest;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EBean;
@@ -23,23 +23,29 @@ public class SNSMobilePush {
     Context context;
 
     @StringRes
+    String server;
+
+    @StringRes
     String endpoint;
 
-    private AmazonSNSClientWrapper snsClientWrapper;
+    private AmazonSNS sns;
 
     @AfterViews
     void initViews() {
         try {
-            AmazonSNS sns = new AmazonSNSClient(
+            this.sns = new AmazonSNSClient(
                     new PropertiesCredentials(this.context.getResources().openRawResource(R.raw.credentials)));
-            sns.setEndpoint(this.endpoint);
-            this.snsClientWrapper = new AmazonSNSClientWrapper(sns);
+            this.sns.setEndpoint(this.server);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void push(String message) {
-        this.snsClientWrapper.demoNotification(message);
+    public void send(String message) {
+        PublishRequest publishRequest = new PublishRequest();
+        publishRequest.setMessageStructure("json");
+        publishRequest.setTargetArn(this.endpoint);
+        publishRequest.setMessage("{\"APNS_SANDBOX\":\"{\\\"aps\\\":{\\\"sound\\\":\\\"default\\\",\\\"alert\\\":\\\"" + message + "\\\"}}\"}");
+        this.sns.publish(publishRequest);
     }
 }
