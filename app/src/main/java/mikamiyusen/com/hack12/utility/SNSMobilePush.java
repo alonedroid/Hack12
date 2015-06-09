@@ -77,7 +77,7 @@ public class SNSMobilePush {
 		String privateKey = null;
 		// end of each line.
         String applicationName = "Bee";
-        String deviceToken = "b267ee46225f45734306921101135e1bd26b0811f8d44dd777dbad8e58f66b37";
+        String deviceToken = "【Token】"; // FIXME 【Token】
         snsClientWrapper.demoNotification(Platform.APNS_SANDBOX, privateKey,
                 certificate, deviceToken, applicationName, attributesMap, message);
     }

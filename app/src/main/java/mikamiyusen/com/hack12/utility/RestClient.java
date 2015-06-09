@@ -7,7 +7,8 @@ import org.androidannotations.api.rest.MediaType;
 import org.androidannotations.api.rest.RestClientHeaders;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
-@Rest(rootUrl = "http://172.20.10.2", converters = {MappingJackson2HttpMessageConverter.class})
+// FIXME 【IP】
+@Rest(rootUrl = "http://【IP】", converters = {MappingJackson2HttpMessageConverter.class})
 public interface RestClient extends RestClientHeaders {
 
     @Get("/logoff.php")

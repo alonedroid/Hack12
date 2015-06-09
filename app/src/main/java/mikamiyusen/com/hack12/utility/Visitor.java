@@ -1,5 +1,7 @@
 package mikamiyusen.com.hack12.utility;
 
+import android.util.Log;
+
 import lombok.Getter;
 import rx.subjects.BehaviorSubject;
 
@@ -17,6 +19,7 @@ public class Visitor {
     private double baseRotate;
 
     public void checkVisitor(double newRotate) {
+        Log.d("rotate", newRotate+"ms");
         if (newRotate == NOISE) return;
 
         if (this.initRotate) {
